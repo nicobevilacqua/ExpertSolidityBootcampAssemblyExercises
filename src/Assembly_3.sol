@@ -7,13 +7,10 @@ contract SubOverflow {
     function subtract(uint256 x, uint256 y) public pure returns (uint256) {
         // Write assembly code that handles overflows
         assembly {
+            if gt(y, x) {
+                return(0x00, 0x20)
+            }
             let response := sub(x, y)
-            if gt(response, x) {
-                return(0x00, 0x20)
-            }
-            if gt(response, y) {
-                return(0x00, 0x20)
-            }
             mstore(0x00, response)
             return(0x00, 0x20)
         }

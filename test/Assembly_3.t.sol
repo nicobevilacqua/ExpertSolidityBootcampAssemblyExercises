@@ -17,7 +17,7 @@ contract Assembly1Test is Test {
             expected = _x - _y;
         }
         uint256 response = subOverflow.subtract(_x, _y);
-        if (expected > _x || expected > _y) {
+        if (_y > _x) {
             assertEq(response, 0);
             return;
         }

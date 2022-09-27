@@ -11,11 +11,14 @@ contract Assembly1Test is Test {
         scope = new Scope();
     }
 
-    function testSubOverflow(uint256 _x) public {
+    function testIncrement(uint256 _x) public {
         uint256 expected;
         uint256 count = scope.count();
         unchecked {
             expected = count + _x;
+        }
+        if (expected < count || expected < _x) {
+            return;
         }
         scope.increment(_x);
         assertEq(scope.count(), expected);

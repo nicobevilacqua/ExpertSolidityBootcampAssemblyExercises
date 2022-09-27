@@ -13,9 +13,10 @@ contract Intro {
             // To return it needs to be stored in memory
             // with command mstore(MEMORY_LOCATION, STACK_VARIABLE)
             // to return you need to specify address and the size from the starting point
-            let val := mol
-            mstore(0x00, val)
-            return(0x00, 0x20)
+            let fmp := mload(0x40)
+            mstore(fmp, mol)
+            mstore(0x40, add(fmp, 0x20))
+            return(fmp, 0x20)
         }
     }
 }
