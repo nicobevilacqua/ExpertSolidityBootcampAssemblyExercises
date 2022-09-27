@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.4;
 
 contract Scope {
@@ -7,7 +8,7 @@ contract Scope {
         // Modify state of the count variable from within
         // the assembly segment
         assembly {
-
+            sstore(count.slot, add(sload(count.slot), num))
         }
     }
 }

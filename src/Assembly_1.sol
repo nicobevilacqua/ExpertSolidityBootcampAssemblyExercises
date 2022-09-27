@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.4;
 
 contract Intro {
@@ -12,6 +13,9 @@ contract Intro {
             // To return it needs to be stored in memory
             // with command mstore(MEMORY_LOCATION, STACK_VARIABLE)
             // to return you need to specify address and the size from the starting point
+            let val := mol
+            mstore(0x00, val)
+            return(0x00, 0x20)
         }
     }
 }
