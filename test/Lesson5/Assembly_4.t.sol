@@ -2,7 +2,7 @@
 pragma solidity ^0.8.13;
 
 import "forge-std/Test.sol";
-import {Scope} from "../src/Assembly_4.sol";
+import {Scope} from "../../src/Lesson5/Assembly_4.sol";
 
 contract Assembly1Test is Test {
     Scope public scope;

@@ -2,7 +2,7 @@
 pragma solidity ^0.8.13;
 
 import "forge-std/Test.sol";
-import {Intro} from "../src/Assembly_1.sol";
+import {Intro} from "../../src/Lesson5/Assembly_1.sol";
 
 contract Assembly1Test is Test {
     Intro public intro;

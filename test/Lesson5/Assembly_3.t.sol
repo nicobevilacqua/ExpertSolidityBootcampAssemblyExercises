@@ -2,7 +2,7 @@
 pragma solidity ^0.8.13;
 
 import "forge-std/Test.sol";
-import {SubOverflow} from "../src/Assembly_3.sol";
+import {SubOverflow} from "../../src/Lesson5/Assembly_3.sol";
 
 contract Assembly1Test is Test {
     SubOverflow public subOverflow;
