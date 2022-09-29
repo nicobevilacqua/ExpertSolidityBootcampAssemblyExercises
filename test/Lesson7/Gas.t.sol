@@ -37,6 +37,8 @@ contract GasContractTest is Test {
     address private constant ADMIN4 =
         0xeadb3d065f8d15cc05e92594523516aD36d1c834;
 
+    address[5] private admins;
+
     uint256 private constant TOTAL_SUPPLY = 10000;
 
     function setUp() public {
@@ -45,7 +47,7 @@ contract GasContractTest is Test {
         addr2 = makeAddr("addr2");
         addr3 = makeAddr("addr3");
 
-        address[] memory admins = new address[](5);
+        // address[] memory admins = new address[](5);
         admins[0] = ADMIN1;
         admins[1] = ADMIN2;
         admins[2] = ADMIN3;
@@ -91,6 +93,7 @@ contract GasContractTest is Test {
         );
         GasContract.Payment[] memory payments = gasContract.getPayments(OWNER);
         assertEq(payments.length, 5);
+        assertEq(payments[0].recipientName, "acc1");
         assertEq(payments[0].amount, 302);
         assertEq(
             uint256(payments[0].paymentType),
@@ -99,7 +102,7 @@ contract GasContractTest is Test {
         vm.stopPrank();
     }
 
-    event Transfer(address recipient, uint256 amount);
+    event Transfer(address indexed recipient, uint256 amount);
 
     function testGasContractEvents() public {
         vm.startPrank(OWNER);
@@ -110,11 +113,7 @@ contract GasContractTest is Test {
     }
 
     function testCheckForAdmin() public {
-        vm.expectRevert(
-            bytes(
-                "Error in Gas contract - onlyAdminOrOwner modifier : revert happened because the originator of the transaction was not the admin, and furthermore he wasn't the owner of the contract, so he cannot run this function"
-            )
-        );
+        vm.expectRevert(GasContract.NotAdminOrOwner.selector);
         vm.prank(addr1);
         gasContract.updatePayment(
             OWNER,
@@ -136,12 +135,8 @@ contract GasContractTest is Test {
     }
 
     function testWhitelistWorks() public {
-        GasContract.ImportantStruct memory importantStruct;
-        importantStruct.valueA = 101;
-        importantStruct.bigValue = 100000000000000;
-        importantStruct.valueB = 202;
-
         _addToWhiteList();
+
         vm.startPrank(OWNER);
         gasContract.transfer(addr1, 500, "acc1");
         gasContract.transfer(addr2, 300, "acc1");
@@ -157,13 +152,13 @@ contract GasContractTest is Test {
         uint256 sendValue3 = 50;
 
         vm.prank(addr1);
-        gasContract.whiteTransfer(recipient1, sendValue1, importantStruct);
+        gasContract.whiteTransfer(recipient1, sendValue1);
 
         vm.prank(addr2);
-        gasContract.whiteTransfer(recipient2, sendValue2, importantStruct);
+        gasContract.whiteTransfer(recipient2, sendValue2);
 
         vm.prank(addr3);
-        gasContract.whiteTransfer(recipient3, sendValue3, importantStruct);
+        gasContract.whiteTransfer(recipient3, sendValue3);
 
         assertEq(gasContract.balanceOf(recipient1), sendValue1 - 1);
         assertEq(gasContract.balanceOf(recipient2), sendValue2 - 2);
