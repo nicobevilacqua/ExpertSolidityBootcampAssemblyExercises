@@ -38,7 +38,7 @@ contract GasContract is Ownable, Constants {
     /**
         PRIVATE STORAGE
      */
-    uint256 private paymentCounter = 0;
+    uint256 private paymentCounter;
     mapping(address => Payment[]) private payments;
     mapping(address => uint256) private balances;
 
@@ -115,7 +115,7 @@ contract GasContract is Ownable, Constants {
 
             administrators[i] = admin;
 
-            uint256 adminSupply = 0;
+            uint256 adminSupply;
             if (admin == owner()) {
                 adminSupply = totalSupply;
             }
@@ -163,8 +163,10 @@ contract GasContract is Ownable, Constants {
             revert RecipientNameTooLong();
         }
 
-        balances[msg.sender] -= _amount;
-        balances[_recipient] += _amount;
+        unchecked {
+            balances[msg.sender] -= _amount;
+            balances[_recipient] += _amount;
+        }
 
         payments[msg.sender].push(
             Payment({
@@ -260,11 +262,16 @@ contract GasContract is Ownable, Constants {
             revert WhiteTransferAmountToSmall();
         }
 
-        balances[msg.sender] = userBalance - _amount + whitelist[msg.sender];
-        balances[_recipient] =
-            balances[_recipient] +
-            _amount -
-            whitelist[msg.sender];
+        unchecked {
+            balances[msg.sender] =
+                userBalance -
+                _amount +
+                whitelist[msg.sender];
+            balances[_recipient] =
+                balances[_recipient] +
+                _amount -
+                whitelist[msg.sender];
+        }
 
         emit WhiteListTransfer(_recipient);
     }
