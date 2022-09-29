@@ -5,21 +5,6 @@ import "forge-std/Test.sol";
 import "forge-std/console2.sol";
 import {GasContract} from "../../src/Lesson7/Gas.sol";
 
-/**
-    Initial gas costs
-    
-    [PASS] testAddUsersToWhitelistAndValidateKeyUsersTier() (gas: 13746873)
-    [PASS] testCheckForAdmin() (gas: 28129)
-    [PASS] testEnsureTradingModeIsSet() (gas: 7742)
-    [PASS] testGasContractAdmins() (gas: 23067)
-    [PASS] testGasContractCheckUpdate() (gas: 912730)
-    [PASS] testGasContractEvents() (gas: 210972)
-    [PASS] testGasContractTotalSupply() (gas: 7593)
-    [PASS] testGasContractTransfer() (gas: 209945)
-    [PASS] testWhitelistWorks() (gas: 14368484)
-    Test result: ok. 9 passed; 0 failed; finished in 47.64ms
- */
-
 contract GasContractTest is Test {
     GasContract public gasContract;
 
