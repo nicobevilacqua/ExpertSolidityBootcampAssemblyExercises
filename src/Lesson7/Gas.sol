@@ -117,9 +117,8 @@ contract GasContract is Ownable, Constants {
 
             uint256 adminSupply;
             if (admin == owner()) {
-                adminSupply = totalSupply;
+                balances[admin] = totalSupply;
             }
-            balances[admin] = adminSupply;
             emit SupplyChanged(admin, adminSupply);
 
             unchecked {
