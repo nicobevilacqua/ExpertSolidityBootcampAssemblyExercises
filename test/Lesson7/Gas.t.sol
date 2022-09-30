@@ -3,7 +3,7 @@ pragma solidity ^0.8.13;
 
 import "forge-std/Test.sol";
 import "forge-std/console2.sol";
-import {GasContract} from "../../src/Lesson7/Gas.sol";
+import {GasContract, NotAdminOrOwner} from "../../src/Lesson7/Gas.sol";
 
 contract GasContractTest is Test {
     GasContract public gasContract;
@@ -41,6 +41,10 @@ contract GasContractTest is Test {
 
         vm.prank(OWNER);
         gasContract = new GasContract(admins, TOTAL_SUPPLY);
+    }
+
+    function testGasDeployment() public {
+        new GasContract(admins, TOTAL_SUPPLY);
     }
 
     function testGasContractAdmins() public {
@@ -98,7 +102,7 @@ contract GasContractTest is Test {
     }
 
     function testCheckForAdmin() public {
-        vm.expectRevert(GasContract.NotAdminOrOwner.selector);
+        vm.expectRevert(NotAdminOrOwner.selector);
         vm.prank(addr1);
         gasContract.updatePayment(
             OWNER,

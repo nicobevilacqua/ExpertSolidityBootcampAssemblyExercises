@@ -3,6 +3,21 @@ pragma solidity ^0.8.13;
 
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
+/**
+        CUSTOM ERRORS
+     */
+error NotAdminOrOwner();
+error NotWhitelisted();
+error IncorrectTier();
+error InsufficientBalance(uint256 balance, uint256 amount);
+error RecipientNameTooLong();
+error InvalidPaymentId();
+error InvalidPaymentAmount();
+error InvalidPaymentUser();
+error WhiteTransferInsufficientBalance();
+error WhiteTransferAmountToSmall();
+error InvalidAdmin();
+
 contract GasContract is Ownable {
     /**
         STRUCTS
@@ -14,10 +29,10 @@ contract GasContract is Ownable {
     }
 
     struct Payment {
-        PaymentType paymentType;
         uint256 paymentID;
         uint256 amount;
         address admin; // administrators address
+        PaymentType paymentType;
         bool adminUpdated;
         address recipient;
         bytes8 recipientName; // max 8 characters
@@ -48,21 +63,6 @@ contract GasContract is Ownable {
      */
     mapping(address => uint256) public whitelist;
     address[5] public administrators;
-
-    /**
-        CUSTOM ERRORS
-     */
-    error NotAdminOrOwner();
-    error NotWhitelisted();
-    error IncorrectTier();
-    error InsufficientBalance(uint256 balance, uint256 amount);
-    error RecipientNameTooLong();
-    error InvalidPaymentId();
-    error InvalidPaymentAmount();
-    error InvalidPaymentUser();
-    error WhiteTransferInsufficientBalance();
-    error WhiteTransferAmountToSmall();
-    error InvalidAdmin();
 
     /**
         EVENTS
