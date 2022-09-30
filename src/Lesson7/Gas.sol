@@ -1,17 +1,18 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.4;
+pragma solidity ^0.8.13;
 
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
-contract Constants {
-    uint256 internal constant TRADE_FLAG = 1;
-    uint256 internal constant DIVIDEND_FLAG = 1;
-}
-
-contract GasContract is Ownable, Constants {
+contract GasContract is Ownable {
     /**
         STRUCTS
      */
+    struct ImportantStruct {
+        uint256 valueA; // max 3 digits
+        uint256 bigValue;
+        uint256 valueB; // max 3 digits
+    }
+
     struct Payment {
         PaymentType paymentType;
         uint256 paymentID;
@@ -107,24 +108,11 @@ contract GasContract is Ownable, Constants {
     constructor(address[5] memory _admins, uint256 _totalSupply) {
         totalSupply = _totalSupply;
 
-        for (uint8 i = 0; i < 5; ) {
-            address admin = _admins[i];
-            if (admin == address(0)) {
-                revert InvalidAdmin();
-            }
+        administrators = _admins;
 
-            administrators[i] = admin;
+        balances[msg.sender] = _totalSupply;
 
-            uint256 adminSupply;
-            if (admin == owner()) {
-                balances[admin] = totalSupply;
-            }
-            emit SupplyChanged(admin, adminSupply);
-
-            unchecked {
-                ++i;
-            }
-        }
+        emit SupplyChanged(msg.sender, _totalSupply);
     }
 
     /**
@@ -135,7 +123,7 @@ contract GasContract is Ownable, Constants {
     }
 
     function getTradingMode() public pure returns (bool) {
-        return TRADE_FLAG == 1 || DIVIDEND_FLAG == 1;
+        return true;
     }
 
     function getPayments(address _user)
@@ -247,18 +235,19 @@ contract GasContract is Ownable, Constants {
         emit AddedToWhitelist(_userAddrs, _tier);
     }
 
-    function whiteTransfer(address _recipient, uint256 _amount)
-        external
-        checkIfWhiteListed
-    {
+    function whiteTransfer(
+        address _recipient,
+        uint256 _amount,
+        ImportantStruct calldata
+    ) external checkIfWhiteListed {
+        if (_amount <= 3) {
+            revert WhiteTransferAmountToSmall();
+        }
+
         uint256 userBalance = balances[msg.sender];
 
         if (userBalance < _amount) {
             revert WhiteTransferInsufficientBalance();
-        }
-
-        if (_amount <= 3) {
-            revert WhiteTransferAmountToSmall();
         }
 
         unchecked {

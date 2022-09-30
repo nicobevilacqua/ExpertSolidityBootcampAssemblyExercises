@@ -136,14 +136,16 @@ contract GasContractTest is Test {
         uint256 sendValue2 = 150;
         uint256 sendValue3 = 50;
 
+        GasContract.ImportantStruct memory _struct;
+
         vm.prank(addr1);
-        gasContract.whiteTransfer(recipient1, sendValue1);
+        gasContract.whiteTransfer(recipient1, sendValue1, _struct);
 
         vm.prank(addr2);
-        gasContract.whiteTransfer(recipient2, sendValue2);
+        gasContract.whiteTransfer(recipient2, sendValue2, _struct);
 
         vm.prank(addr3);
-        gasContract.whiteTransfer(recipient3, sendValue3);
+        gasContract.whiteTransfer(recipient3, sendValue3, _struct);
 
         assertEq(gasContract.balanceOf(recipient1), sendValue1 - 1);
         assertEq(gasContract.balanceOf(recipient2), sendValue2 - 2);
