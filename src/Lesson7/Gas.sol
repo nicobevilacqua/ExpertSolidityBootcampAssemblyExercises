@@ -54,7 +54,6 @@ contract GasContract is Ownable {
     /**
         PRIVATE STORAGE
      */
-    uint256 private paymentCounter;
     mapping(address => Payment[]) private payments;
     mapping(address => uint256) private balances;
 
@@ -152,8 +151,8 @@ contract GasContract is Ownable {
 
         unchecked {
             balances[msg.sender] -= _amount;
-            balances[_recipient] += _amount;
         }
+        balances[_recipient] += _amount;
 
         payments[msg.sender].push(
             Payment({
@@ -163,7 +162,7 @@ contract GasContract is Ownable {
                 recipient: _recipient,
                 amount: _amount,
                 recipientName: bytes8(bytes(_name)),
-                paymentID: ++paymentCounter
+                paymentID: payments[msg.sender].length + 1
             })
         );
 
@@ -218,18 +217,6 @@ contract GasContract is Ownable {
         external
         onlyAdminOrOwner
     {
-        /**
-            WEIRD TIER LOGIC
-         */
-        uint8 tier = _tier;
-        if (_tier > 3) {
-            tier = 3;
-        } else if (_tier == 1) {
-            tier = 1;
-        } else if (_tier > 0 && _tier < 3) {
-            tier = 2;
-        }
-
         whitelist[_userAddrs] = _tier;
 
         emit AddedToWhitelist(_userAddrs, _tier);
