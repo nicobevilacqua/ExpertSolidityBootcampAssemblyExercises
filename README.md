@@ -8,6 +8,7 @@ Collection of exercises and solution from Septemer Encode's expoert solidity boo
 * Homework 4
 * Homework 5
 * [Homework 9](#homework-9)
+* [Homework 13](#homework-13)
 
 
 ## Homework 9
@@ -34,3 +35,46 @@ If a contract uses tx.origin for authentication/user validation then you can imp
   7. Explicitly visibility should be added to storage variables.
   8. Event names should be on CamelCase, and should be a verb in past. (on this case, StudentWelcomed would be a better name for that event)
   9. Message is not being sent to the students. The implementation is wrong.
+
+
+## Homework 10
+
+### 1. Why are negative numbers more expensive to store than positive numbers?
+### 2. Test the following statements in Remix, which is cheaper and why ? Assume that the demoninator can never be zero
+  1. 
+  ```
+  result = numerator / denominator;
+  ``` 
+  vs 
+  ```
+  assembly { result := div(numerator, denominator) }
+  ```
+
+
+## Homework 13
+
+1. Investigate this [project](./src//Lesson13/DeFi1.sol)
+
+Imagine you have been given the DeFi1 contract by a colleague and asked to test it
+using Foundry.
+
+Your colleague explains that the contract allows
+
+* investors to be added by the administrator
+* investors to claim tokens, but the amount that they can claim should reduce
+every 1000 blocks.
+
+When testing make sure you know
+
+* how would you advance blocks
+* how would you make sure every block will work
+* how would you make sure the contract works with different starting values such
+as
+  - block reward
+  - numbers of investors
+  - initial number of tokens
+
+Try to find all the bugs / security problems / optimisation opportunities in the
+contract.
+
+You do not need to fix the code.
